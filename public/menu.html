@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        /* Reset de margens e padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            background: #fff;
+            max-width: 400px;
+            width: 90%;
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #444;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 10px 0;
+        }
+
+        ul li a {
+            display: block;
+            font-size: 1rem;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 12px;
+            border: 1px solid #2563eb;
+            border-radius: 8px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        ul li a:hover {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        button {
+            display: block;
+            font-size: 1rem;
+            color: #2563eb;
+            background: #fff;
+            font-weight: bold;
+            padding: 12px;
+            border: 1px solid #2563eb;
+            border-radius: 8px;
+            transition: background 0.3s ease, color 0.3s ease;
+            cursor: pointer;
+            margin: 10px auto 0;
+            width: calc(35% - 24px); /* para manter alinhado com os links */
+        }
+
+        button:hover {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            ul li a, button {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bem-vindo ao Menu</h1>
+        <p>Último acesso: <span id="last-access">Carregando...</span></p>
+        <ul>
+            <li><a href="/cadastro">Cadastro de Usuários</a></li>
+            <li><a href="/chat">Bate-papo</a></li>
+            <button onclick="sair()">Sair</button>
+        </ul>
+    </div>
+    <script>
+        
+        const lastAccessSpan = document.getElementById("last-access");
+        const lastAccess = localStorage.getItem("lastAccess");
+
+        if (lastAccess) {
+            lastAccessSpan.textContent = lastAccess;
+        } else {
+            lastAccessSpan.textContent = "Primeiro acesso";
+        }
+
+        
+        const now = new Date();
+        const formattedDate = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+        localStorage.setItem("lastAccess", formattedDate);
+
+            function sair() {
+            window.location.href = "/login";
+        }
+    </script>
+</body>
+</html>

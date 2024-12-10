@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bate-papo</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #2563eb;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        button:active {
+            background-color: #1e40af;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Bate-papo</h1>
+        <form id="form-mensagem" method="POST" action="/api/postarMensagem">
+            <select name="usuario" id="usuario" required>
+                <option value="">Selecione um usuário</option>
+                
+            </select>
+            <textarea name="mensagem" placeholder="Digite sua mensagem..." required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+        <button onclick="voltarMenu()">Sair do Bate-papo</button>
+        <br>
+        <br>
+        <ul id="lista-mensagens"></ul>
+    </div>
+
+    <script>
+        
+        async function carregarUsuarios() {
+            try {
+                const response = await fetch('/api/usuarios'); 
+                const usuarios = await response.json(); 
+                const selectUsuarios = document.getElementById('usuario');
+
+                
+                selectUsuarios.innerHTML = '<option value="">Selecione um usuário</option>';
+
+                
+                usuarios.forEach(usuario => {
+                    const option = document.createElement('option');
+                    option.value = usuario.nickname; 
+                    option.textContent = usuario.nome; 
+                    selectUsuarios.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+            }
+        }
+
+        
+        async function carregarMensagens() {
+            try {
+                const response = await fetch('/api/mensagens');
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar mensagens: ${response.status}`);
+                }
+
+                const mensagens = await response.json();
+                const listaMensagens = document.getElementById('lista-mensagens');
+
+                
+                listaMensagens.innerHTML = '';
+
+                mensagens.forEach(msg => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${msg.usuario}</strong>: ${msg.mensagem} <br> <em>${msg.data}</em>`;
+                    listaMensagens.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Erro ao carregar mensagens:', error);
+            }
+        }
+
+
+
+        
+        document.getElementById('form-mensagem').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+
+            const usuario = document.getElementById('usuario').value;
+            const mensagem = document.querySelector('textarea[name="mensagem"]').value;
+
+            if (!usuario || !mensagem) {
+                alert('Preencha todos os campos antes de enviar.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/postarMensagem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ usuario, mensagem }),
+                });
+
+                if (response.ok) {
+                    alert('Mensagem enviada com sucesso!');
+                    document.querySelector('textarea[name="mensagem"]').value = ''; 
+                    carregarMensagens(); 
+                } else {
+                    alert('Erro ao enviar mensagem. Verifique os campos.');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar mensagem:', error);
+                alert('Erro ao enviar mensagem.');
+            }
+        });
+
+       
+        function voltarMenu() {
+            window.location.href = '/menu.html'; 
+        }
+
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarUsuarios();
+            carregarMensagens();
+        });
+    </script>
+</body>
+
+</html>

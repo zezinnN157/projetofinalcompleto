@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .redirect {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .redirect a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .redirect a:hover {
+            color: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Usuário (Apelido)" required>
+            <input type="password" name="password" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <div class="redirect">
+            <p>Não possui uma conta? <a href="/cadastro">Cadastre-se aqui</a></p>
+        </div>
+    </div>
+</body>
+</html>
